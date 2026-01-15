@@ -2,8 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-
 const leadRoutes = require('./routes/leadRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express()
 
@@ -16,6 +16,7 @@ mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("Bhai MongoDB successfully connect ho gya"))
     .catch((err) => console.error("MongoDB connection me error hai:", err));
 
+app.use('/api/auth', authRoutes);
 app.use('/api/leads', leadRoutes);
 
 // Test route 
