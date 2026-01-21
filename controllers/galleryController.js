@@ -1,4 +1,5 @@
 const Photo = require('../models/Photo');
+const { cloudinary } = require('../config/cloudinary');
 
 const uploadPhoto = async(req, res) => {
     try {
@@ -39,16 +40,24 @@ const getPhoto = async(req, res) => {
 
 const deletePhoto = async(req, res) => {
     try {
-        const photo = await Photo.findById(req.params.id);
+
+        const { id } = req.params;
+        const photo = await Photo.findById(id);
 
         if(!photo) {
             return res.status(404).json({ message: "Photo not found" });
         }
 
-        await photo.deletePhoto();
-        res.status(200).json({ message: "Photo deleted" });
+        if(photo.publicId){
+            await cloudinary.uploader.destroy(photo.publicId);
+        }
+
+        await photo.deleteOne();
+
+        res.status(200).json({ message: "Photo deleted successfully" });
 
     } catch (error) {
+        console.error("Delete Error:", error);
         res.status(500).json({ message: "Server Error", error: error.message });
     }
 };
