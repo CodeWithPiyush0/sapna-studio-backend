@@ -4,6 +4,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const leadRoutes = require('./routes/leadRoutes');
 const authRoutes = require('./routes/authRoutes');
+const galleryRoutes = require('./routes/galleryRoutes');
 
 const app = express()
 
@@ -18,6 +19,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 app.use('/api/auth', authRoutes);
 app.use('/api/leads', leadRoutes);
+app.use('/api/gallery', galleryRoutes);
 
 // Test route 
 app.get('/', (req, res) => {
